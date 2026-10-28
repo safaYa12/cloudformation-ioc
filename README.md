@@ -442,14 +442,3 @@ The next improvements for this project are:
 - Build a small multi-stack example using exports and imports.
 - Explore CloudFormation drift detection and CloudFormation Guard.
 
-## LinkedIn Project Description
-
-Completed a hands-on AWS CloudFormation fundamentals project covering template structure, stacks, intrinsic functions, mappings, outputs, pseudo parameters, dynamic Amazon Linux 2023 AMI selection through SSM public parameters, EC2 web-server provisioning, security-group references, Elastic IPs, Session Manager, User Data, and CloudFormation helper scripts.
-
-I also practised template validation and testing with `cfn-lint` and TaskCat, and documented real troubleshooting scenarios involving a `curl`/`curl-minimal` package conflict, incomplete User Data execution, Apache returning HTTP 403 instead of the expected PHP page, CloudFormation rollback states, and an AWS Organizations SCP denying `s3:CreateBucket`.
-
-This project strengthened my understanding of Infrastructure as Code, AWS permissions, EC2 bootstrapping, deployment validation, and systematic troubleshooting.
-
-## Hashtags
-
-#AWS #AWSCloudFormation #InfrastructureAsCode #AWSCloud #DevOps #CloudEngineering #AmazonEC2 #SystemsManager #CloudSecurity #LearningInPublic
