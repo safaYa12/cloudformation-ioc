@@ -1,4 +1,4 @@
-# AWS CloudFormation Fundamentals: Infrastructure as Code, Deployment & Troubleshooting
+# AWS CloudFormation Fundamentals: Infrastructure as Code, EC2 Deployment & Troubleshooting
 
 ## Project Overview
 
@@ -362,4 +362,94 @@ aws cloudformation create-stack \
 
 If the template creates or modifies IAM resources that require acknowledgement, include the appropriate capability flag, such as `--capabilities CAPABILITY_IAM`.
 
-Stack deletion should only be performed after confirming that the resources are safe to remove and that no required data or infrastructure will
+Stack deletion should only be performed after confirming that the resources are safe to remove and that no required data or infrastructure will be lost.
+
+## 13. AWS CLI Profile and Region
+
+The exercises used the AWS CLI profile:
+
+```text
+cloudformation-stack-user
+```
+
+The Region used was:
+
+```text
+ap-southeast-2
+```
+
+Verify the active AWS identity:
+
+```bash
+aws sts get-caller-identity \
+  --profile cloudformation-stack-user
+```
+
+Inspect a stack:
+
+```bash
+aws cloudformation describe-stacks \
+  --stack-name demo \
+  --profile cloudformation-stack-user \
+  --region ap-southeast-2
+```
+
+Before publishing terminal screenshots or logs, sensitive and environment-specific information such as account IDs, IP addresses, ARNs, and access details should be redacted.
+
+## 14. Complete Troubleshooting Checklist
+
+When a CloudFormation deployment fails or an application does not work as expected, I now approach the issue layer by layer.
+
+1. **Template validation:** Run `cfn-lint` and inspect YAML indentation, property names, and resource types.
+2. **CloudFormation events:** Find the first failed resource and read the detailed status reason.
+3. **Permissions:** Check IAM permissions, the active identity, and any AWS Organizations SCP restrictions.
+4. **Resource references:** Confirm that references such as `!Ref WebServerSecurityGroup` are placed under the correct resource properties.
+5. **Networking:** Verify VPC/subnet compatibility, security-group rules, routes, and public addressing.
+6. **Bootstrap logs:** Inspect `/var/log/cloud-init-output.log` and run `cloud-init status --long`.
+7. **Service health:** Check `systemctl`, listening sockets, local HTTP responses, and expected files.
+8. **Stack state:** Understand states such as `ROLLBACK_COMPLETE` before attempting another deployment.
+9. **Application verification:** Test the actual application endpoint instead of relying only on the stack status.
+10. **Cleanup:** Remove unneeded lab resources and confirm deletion completed.
+
+## 15. Key Takeaways
+
+This project reinforced several important AWS and Infrastructure as Code concepts:
+
+- CloudFormation enables repeatable infrastructure deployment, but templates, permissions, networking, and bootstrap commands must all be configured correctly.
+- Intrinsic functions make templates more reusable and allow resources to reference one another.
+- Dynamic SSM AMI parameters help avoid hard-coding Region-specific AMI IDs.
+- User Data failures can occur even when an EC2 resource is successfully created.
+- Cloud-init logs are essential for diagnosing bootstrap problems.
+- Security groups must be explicitly associated with resources where required.
+- `cfn-init` and `cfn-signal` can make configuration and readiness checks more structured.
+- `cfn-lint` is useful before deployment, but integration testing still requires appropriate AWS permissions.
+- AWS Organizations SCPs can deny actions even when a user has relevant IAM permissions.
+- CloudFormation events and stack lifecycle states are important when recovering from failures.
+- Application health must be verified independently from infrastructure creation.
+- Restricting SSH access and using Session Manager where appropriate improves security.
+
+## 16. Next Steps
+
+The next improvements for this project are:
+
+- Refactor User Data to avoid the `curl`/`curl-minimal` package conflict.
+- Add clear bootstrap logging and final application health checks.
+- Add a `CreationPolicy` and `cfn-signal` to validate initialization.
+- Test in an approved sandbox with the required permissions.
+- Parameterize the environment, instance type, and trusted SSH CIDR.
+- Prefer Session Manager over unrestricted public SSH access.
+- Practise CloudFormation change sets before applying stack updates.
+- Build a small multi-stack example using exports and imports.
+- Explore CloudFormation drift detection and CloudFormation Guard.
+
+## LinkedIn Project Description
+
+Completed a hands-on AWS CloudFormation fundamentals project covering template structure, stacks, intrinsic functions, mappings, outputs, pseudo parameters, dynamic Amazon Linux 2023 AMI selection through SSM public parameters, EC2 web-server provisioning, security-group references, Elastic IPs, Session Manager, User Data, and CloudFormation helper scripts.
+
+I also practised template validation and testing with `cfn-lint` and TaskCat, and documented real troubleshooting scenarios involving a `curl`/`curl-minimal` package conflict, incomplete User Data execution, Apache returning HTTP 403 instead of the expected PHP page, CloudFormation rollback states, and an AWS Organizations SCP denying `s3:CreateBucket`.
+
+This project strengthened my understanding of Infrastructure as Code, AWS permissions, EC2 bootstrapping, deployment validation, and systematic troubleshooting.
+
+## Hashtags
+
+#AWS #AWSCloudFormation #InfrastructureAsCode #AWSCloud #DevOps #CloudEngineering #AmazonEC2 #SystemsManager #CloudSecurity #LearningInPublic
