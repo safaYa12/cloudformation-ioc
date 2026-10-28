@@ -1,4 +1,4 @@
-# AWS CloudFormation Fundamentals: Infrastructure as Code, EC2 Deployment & Troubleshooting
+# AWS CloudFormation Fundamentals: Infrastructure as Code, Deployment & Troubleshooting
 
 ## Project Overview
 
